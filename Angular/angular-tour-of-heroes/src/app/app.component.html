@@ -6,8 +6,19 @@
 <!-- * * * * * * * * * Delete the template below * * * * * * * * * * -->
 <!-- * * * * * * * to get started with your project! * * * * * * * * -->
 
- <h1>{{title}}</h1> 
-  
+<!--<h1>{{title}}</h1>
+<app-heroes></app-heroes>
+<app-messages></app-messages>-->
+
+<h1>{{title}}</h1>
+<nav>
+ <a routerLink="/dashboard">Dashboard</a>  <!-- routerLink-селектор, що переходить по вказаній адресі -->
+ <p></p>
+ <a routerLink="/heroes">Heroes</a>
+</nav>
+<router-outlet></router-outlet> <!--директива маршрутизатора, вказує маршрутизатору, де відображати необхідні  шляхи-->
+<app-messages></app-messages>
+
 
 <!-- * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * -->
 <!-- * * * * * * * * * * * The content above * * * * * * * * * * * -->
