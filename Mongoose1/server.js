@@ -4,18 +4,18 @@ var log = require('./libs/log')(module);
 var ArticleModel = require('./libs/mongoose').ArticleModel;
 var app = express();
 var config = require('./libs/config');
+var log = require('./libs/log')(module);
+var ArticleModel = require('./libs/mongoose').ArticleModel;
+
 app.listen(config.get('port'), function () {
     log.info('Express server listening on port ' + config.get('port'));
 });
-
-
 
 app.use(express.favicon()); //стандартна фавіконка
 app.use(express.logger('dev')); //вивід запитів в консоль
 app.use(express.bodyParser()); //стадартний модуль для парсинга json запитів
 app.use(express.methodOverride()); //підтримка вставки і видалення
 app.use(app.router); //обробник подій
-
 app.use(express.static(path.join(__dirname, "public"))); //запуск статичного файлвого сервера
 
 app.get('/api', function (req, res) {
@@ -39,22 +39,18 @@ app.get('/ErrorExample', function (req, res, next) {
     next(new Error('Random error!'));
 });
 
-
-
-var log = require('./libs/log')(module);
-var ArticleModel = require('./libs/mongoose').ArticleModel;
 app.get('/api/articles', function (req, res) {
     return ArticleModel.find(function (err, articles) {
         if (!err) {
             return res.send(articles);
         } else {
             res.statusCode = 500;
-            log.error('Internal error(%d): %s',
-                res.statusCode, err.message);
+            log.error('Internal error(%d): %s', res.statusCode, err.message);
             return res.send({ error: 'Server error' });
         }
     });
 });
+
 app.post('/api/articles', function (req, res) {
     var article = new ArticleModel({
         title: req.body.title,
@@ -62,6 +58,7 @@ app.post('/api/articles', function (req, res) {
         description: req.body.description,
         // images: req.body.images
     });
+    
     article.save(function (err) {
         if (!err) {
             log.info("article created");
@@ -82,6 +79,7 @@ app.post('/api/articles', function (req, res) {
         }
     });
 });
+
 app.get('/api/articles/:id', function (req, res) {
     return ArticleModel.findById(req.params.id, function (err, article) {
         if (!article) {
@@ -97,6 +95,7 @@ app.get('/api/articles/:id', function (req, res) {
         }
     });
 });
+
 app.put('/api/articles/:id', function (req, res) {
     return ArticleModel.findById(req.params.id, function (err, article) {
         if (!article) {
@@ -119,8 +118,7 @@ app.put('/api/articles/:id', function (req, res) {
                     res.statusCode = 500;
                     res.send({ error: 'Server error' });
                 }
-                log.error('Internal error(%d): %s',
-                    res.statusCode, err.message);
+                log.error('Internal error(%d): %s', res.statusCode, err.message);
             }
         });
     });
